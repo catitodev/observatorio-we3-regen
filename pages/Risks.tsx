@@ -4,46 +4,49 @@ import Typewriter from '../components/Typewriter';
 
 const Risks: React.FC = () => {
   return (
-    <article className="animate-in fade-in duration-700 pb-20">
-      <header className="mb-16">
-        <h2 className="text-[10px] font-mono text-neutral-500 uppercase tracking-[0.5em] mb-4">
+    <article className="animate-in fade-in duration-700 pb-40">
+      <header className="mb-14">
+        <h2 className="text-[8px] font-mono text-neutral-600 uppercase tracking-[0.6em] mb-4">
           <Typewriter text="Seção 07" delay={100} />
         </h2>
-        <h1 className="text-4xl lg:text-5xl font-serif text-white leading-tight">
+        <h1 className="text-2xl lg:text-3xl font-serif text-white leading-tight">
           <Typewriter text="Limites, Riscos e Próximos Passos" delay={300} speed={30} />
         </h1>
+        <div className="h-px w-12 bg-white/10 mt-6"></div>
       </header>
       
-      <section className="text-narrative text-neutral-400 space-y-12 font-serif text-lg lg:text-xl">
-        <Typewriter 
-          as="p"
-          delay={1000}
-          text="A consolidação do ecossistema Web3 ReGen como uma infraestrutura socioeconômica viável exige o reconhecimento honesto de que o campo permanece em uma fase emergente, enfrentando limites técnicos, institucionais e regulatórios significativos que não podem ser ignorados sob o pretexto de otimismo tecnológico. O amadurecimento desta nova arquitetura depende da superação de barreiras estruturais, começando pelos altos custos iniciais de implementação e pela complexidade técnica de sistemas como o Digital Monitoring, Reporting, and Verification (dMRV). A dependência atual de sensores de alta precisão e sensoriamento remoto enfrenta o desafio da escassez de dados de solo para a calibração de modelos de inteligência artificial, o que pode resultar em imprecisões ou na criação de 'caixas pretas' algorítmicas que ocultam falhas na observação física da biosfera."
-        />
+      <section className="text-narrative text-neutral-400 space-y-10 font-serif text-sm lg:text-base leading-[1.8] max-w-none">
+        <div className="relative pl-6 border-l border-white/5">
+          <Typewriter 
+            as="p" 
+            delay={1000} 
+            text="A consolidação do ecossistema Web3 ReGen exige o reconhecimento honesto de que o campo permanece em uma fase emergente. O amadurecimento desta arquitetura depende da superação de barreiras estruturais, começando pelos altos custos de implementação e pela complexidade do monitoramento digital (dMRV). A dependência de sensores de alta precisão enfrenta o desafio da escassez de dados de solo, o que pode resultar em imprecisões ou na criação de 'caixas pretas' algorítmicas que mascaram a realidade biofísica." 
+          />
+        </div>
         
-        <Typewriter 
-          as="p"
-          delay={2500}
-          text="Os riscos de governança representam outra fronteira crítica para a sustentabilidade das Impact DAOs. A evidência empírica de baixas taxas de participação, frequentemente inferiores a 10%, aliada a uma alta concentração de poder propositivo, revela que a descentralização idealizada ainda luta para se traduzir em resiliência institucional prática. Existe o perigo real de captura de governança por interesses velados ou elites tecnofinanceiras, onde a votação baseada em tokens pode reforçar estruturas plutocráticas em vez de democratizar a alocação de bens públicos."
-        />
+        <div className="relative pl-6 border-l border-white/5">
+          <Typewriter 
+            as="p" 
+            delay={2200} 
+            text="Os riscos de governança representam outra fronteira crítica. A evidência de baixas taxas de participação em processos decisórios revela que a descentralização idealizada ainda luta para se traduzir em resiliência prática. Existe o perigo real de captura de governança por elites tecnofinanceiras, onde a votação baseada puramente em tokens pode reforçar estruturas plutocráticas em vez de meritocracias de impacto real." 
+          />
+        </div>
 
-        <Typewriter 
-          as="p"
-          delay={4000}
-          text="Sistemicamente, o Web3 ReGen enfrenta a tensão contínua entre a regeneração genuína e o risco de financeirização indevida da natureza. A transformação do Global Commons em uma 'fronteira de commodities' através da tokenização e da criação de mercados hiperlíquidos pode, se dissociada de princípios ecocêntricos, exacerbar lógicas extrativas sob o róulo de inovação. O surgimento do 'greenwashing descentralizado' é uma ameaça latente."
-        />
+        <div className="relative pl-6 border-l border-white/5">
+          <Typewriter 
+            as="p" 
+            delay={3400} 
+            text="Sistemicamente, o Web3 ReGen enfrenta a tensão contínua entre a regeneração genuína e o risco de financeirização indevida da natureza. A transformação do Global Commons em uma 'fronteira de commodities' através da tokenização pode, se dissociada de princípios ecocêntricos rígidos, exacerbar lógicas extrativas sob o rótulo de inovação digital, perpetuando o ciclo de exploração que se propunha a resolver." 
+          />
+        </div>
 
-        <Typewriter 
-          as="p"
-          delay={5500}
-          text="No âmbito regulatório, a divergência entre jurisdições globais e a incerteza sobre a classificação jurídica de tokens de impacto geram atritos que limitam a escala e a integração institucional. Barreiras como o rigor da diretiva MiCA na Europa e a evolução legislativa nos Estados Unidos criam desafios de conformidade que podem excluir projetos pequenos ou geograficamente isolados."
-        />
-
-        <Typewriter 
-          as="p"
-          delay={7000}
-          text="Os próximos passos para a Web3 ReGen envolvem um processo de evolução coletiva voltado à profissionalização e à integração secular. Oportunidades estratégicas residem na maturidade de ferramentas de privacidade e na expansão para ativos do mundo real (RWA) que permitam conectar fluxos financeiros institucionais à regeneração tangível. A transição exige uma mudança de foco: dos ciclos de especulação para a utilidade operacional."
-        />
+        <div className="relative pl-6 border-l border-white/5">
+          <Typewriter 
+            as="p" 
+            delay={4600} 
+            text="No âmbito regulatório, a divergência global gera atritos que limitam a escala institucional. Próximos passos envolvem um processo de evolução voltado à profissionalização e à integração secular, conectando ativos do mundo real (RWA) à regeneração tangível. A transição exige uma mudança radical de foco: dos ciclos de especulação para a utilidade operacional e a prova biológica de impacto positivo." 
+          />
+        </div>
       </section>
     </article>
   );
