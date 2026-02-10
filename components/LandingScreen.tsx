@@ -41,7 +41,6 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onEnter }) => {
 
       setTitleRect({ width: textWidth, height: 40 });
 
-      // Se as partículas ainda não existem, cria. Se existem, apenas atualiza o alvo X/Y
       if (particlesRef.current.length === 0) {
         for (let i = 0; i < targetText.length; i++) {
           const charWidth = ctx.measureText(targetText[i]).width;
@@ -154,22 +153,23 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onEnter }) => {
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_10%,rgba(10,10,10,0.9)_100%)]"></div>
       
       <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
+        {/* Moldura de Lupa / Torus */}
         <div className={`relative w-full max-w-[340px] lg:max-w-[700px] aspect-[16/9] transition-all duration-[3000ms] ease-out ${isFinal ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
           <div className="absolute -inset-2 lg:-inset-4 border border-white/5 rounded-[100%_0] rotate-45 animate-eye-sync opacity-40"></div>
-          <div className="w-full h-full overflow-hidden relative shadow-[0_0_100px_rgba(34,197,94,0.12)] bg-neutral-900/40" style={{ clipPath: 'ellipse(50% 40% at 50% 50%)' }}>
-            <video autoPlay muted loop playsInline className={`w-full h-full object-cover transition-all duration-1000 grayscale-[0.2] ${isFinal ? 'scale-110' : 'scale-100'}`}>
-              <source src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-42564-large.mp4" type="video/mp4" />
+          <div className="w-full h-full overflow-hidden relative shadow-[0_0_100px_rgba(34,197,94,0.1)] bg-neutral-900/20" style={{ clipPath: 'ellipse(50% 40% at 50% 50%)' }}>
+            <video autoPlay muted loop playsInline className={`w-full h-full object-cover transition-all duration-1000 grayscale-[0.6] brightness-75 ${isFinal ? 'scale-110' : 'scale-100'}`}>
+              <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-torus-mesh-on-a-black-background-44165-large.mp4" type="video/mp4" />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/80"></div>
           </div>
         </div>
 
         <div className={`absolute bottom-[12%] lg:bottom-[15%] text-center transition-all duration-1000 delay-700 ${isFinal ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="flex items-center justify-center gap-4 mb-4">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]"></span>
-            <p className="text-[10px] lg:text-[11px] font-mono text-white/80 uppercase tracking-[0.5em] font-medium">Protocolo de Observação Ativa</p>
+            <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+            <p className="text-[9px] lg:text-[10px] font-mono text-white/60 uppercase tracking-[0.5em] font-medium">Protocolo de Observação Ativa</p>
           </div>
-          <p className="mt-4 text-[9px] lg:text-[10px] font-mono text-neutral-500 max-w-xs mx-auto leading-relaxed uppercase tracking-[0.4em]">Sincronização Biosférica v.4.0.2</p>
+          <p className="mt-4 text-[8px] lg:text-[9px] font-mono text-neutral-600 max-w-xs mx-auto leading-relaxed uppercase tracking-[0.4em]">Sincronização Biosférica v.4.0.2</p>
         </div>
       </div>
     </div>
