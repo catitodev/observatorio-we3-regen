@@ -10,11 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        /* Cursor customizado apenas em desktop */
         @media (min-width: 1024px) {
             * { cursor: none !important; }
         }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0a0a0a;
@@ -22,37 +20,21 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
-        
         .font-serif { font-family: 'Playfair Display', serif; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
-        
-        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
         ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #333; }
-
         .text-narrative {
-            line-height: 1.85;
+            line-height: 1.8;
             letter-spacing: -0.01em;
             text-align: justify;
-            hyphens: auto;
         }
-        
         @keyframes sync-pulse {
             0%, 100% { opacity: 0.3; transform: scale(1); }
             50% { opacity: 0.6; transform: scale(1.05); }
         }
-
-        .animate-eye-sync {
-            animation: sync-pulse 6s infinite ease-in-out;
-        }
-
-        .fade-in { animation: fadeIn 1s ease-out forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .animate-eye-sync { animation: sync-pulse 6s infinite ease-in-out; }
     </style>
 <script type="importmap">
 {
@@ -70,12 +52,10 @@
     <div id="root"></div>
     <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
       <filter id="lupa-distortion">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur" />
-        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
-        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur" />
+        <feDisplacementMap in="SourceGraphic" in2="blur" scale="15" xChannelSelector="R" yChannelSelector="G" />
       </filter>
     </svg>
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
-
