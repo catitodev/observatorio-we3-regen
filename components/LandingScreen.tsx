@@ -1,150 +1,46 @@
 
-import React, { useState, useEffect } from 'react';
-import { NAV_ITEMS } from '../constants';
-import { Page } from '../types';
+import React from 'react';
+import Typewriter from '../components/Typewriter';
 
-interface LayoutProps {
-  children: React.ReactNode;
-  activePage: Page;
-  onNavigate: (page: Page) => void;
-}
-
-const Layout: React.FC<LayoutProps> = ({ children, activePage, onNavigate }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isHome = activePage === Page.Home;
-
-  const handleNavClick = (page: Page) => {
-    onNavigate(page);
-    setIsMenuOpen(false);
-  };
-
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [isMenuOpen]);
-
-  const FooterText = () => (
-    <div className="flex flex-col gap-2">
-      <p className="text-[9px] font-mono text-neutral-600 uppercase tracking-[0.2em]">
-        Status: Sincronizado
-      </p>
-      <p className="text-[10px] font-mono text-neutral-500 leading-relaxed tracking-tight">
-        © 2026 Observatório Web3 ReGen · Licença MIT <br/>
-        Infraestrutura por CalangoFlux
-      </p>
-    </div>
-  );
-
+const Risks: React.FC = () => {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-neutral-300 selection:bg-white/10 flex flex-col relative">
+    <article className="animate-in fade-in duration-700 pb-32">
+      <header className="mb-10">
+        <h2 className="text-[9px] font-mono text-neutral-500 uppercase tracking-[0.5em] mb-4">
+          <Typewriter text="Seção 07" delay={100} />
+        </h2>
+        <h1 className="text-3xl lg:text-4xl font-serif text-white leading-tight">
+          <Typewriter text="Limites, Riscos e Próximos Passos" delay={300} speed={30} />
+        </h1>
+      </header>
       
-      {/* Botão de Menu Flutuante - Arredondado e Glassmorphism */}
-      <button 
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className={`
-          fixed top-6 right-6 lg:top-10 lg:right-10 z-[120]
-          flex items-center gap-3 px-6 py-2.5 rounded-full
-          bg-[#0d0d0d]/60 backdrop-blur-xl border border-white/10
-          hover:border-white/30 transition-all duration-500 group
-          ${isMenuOpen ? 'bg-white text-black border-white' : 'text-white'}
-        `}
-      >
-        <span className="text-[9px] font-mono tracking-[0.3em] uppercase ml-1">
-          {isMenuOpen ? 'Fechar' : 'Menu'}
-        </span>
-        <div className="flex flex-col gap-1 w-3.5">
-          <span className={`h-px w-full bg-current transition-transform duration-500 ${isMenuOpen ? 'rotate-45 translate-y-[2px]' : ''}`}></span>
-          <span className={`h-px w-full bg-current transition-transform duration-500 ${isMenuOpen ? '-rotate-45 -translate-y-[2px]' : ''}`}></span>
-        </div>
-      </button>
-
-      {/* Identificador de Marca (Top Left) */}
-      {!isHome && (
-        <div className="fixed top-6 left-6 lg:top-10 lg:left-10 z-[40] pointer-events-none">
-          <div className="text-[11px] font-serif text-white/30 tracking-widest uppercase">
-            Web3 ReGen <span className="ml-1 font-mono text-[9px] opacity-30 tracking-normal italic">v4.0.2</span>
-          </div>
-        </div>
-      )}
-
-      {/* Overlay do Menu Drawer - Translúcido */}
-      <div className={`
-        fixed inset-0 z-[110] transition-all duration-700 ease-in-out
-        ${isMenuOpen ? 'visible opacity-100' : 'invisible opacity-0'}
-      `}>
-        <div 
-          className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-          onClick={() => setIsMenuOpen(false)}
+      <section className="text-narrative text-neutral-400 space-y-8 font-serif text-base lg:text-lg">
+        <Typewriter 
+          as="p"
+          delay={1000}
+          text="A consolidação do ecossistema Web3 ReGen como uma infraestrutura socioeconômica viável exige o reconhecimento honesto de que o campo permanece em uma fase emergente, enfrentando limites técnicos, institucionais e regulatórios significativos. O amadurecimento desta arquitetura depende da superação de barreiras estruturais, começando pelos altos custos de implementação e pela complexidade do monitoramento digital (dMRV). A dependência de sensores de alta precisão e sensoriamento remoto enfrenta o desafio da escassez de dados de solo, o que pode resultar em imprecisões ou na criação de 'caixas pretas' algorítmicas."
         />
         
-        <div className={`
-          absolute right-0 top-0 h-full w-full lg:w-[400px] 
-          bg-[#0d0d0d]/80 backdrop-blur-[40px] 
-          border-l border-white/5 p-10 lg:p-16 flex flex-col justify-between
-          transition-transform duration-700 cubic-bezier(0.16, 1, 0.3, 1)
-          ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}
-        `}>
-          <div>
-            <div className="mb-16">
-              <h3 className="text-[9px] font-mono text-neutral-500 uppercase tracking-[0.5em] mb-4">Navegação</h3>
-              <div className="h-px w-8 bg-white/20"></div>
-            </div>
+        <Typewriter 
+          as="p"
+          delay={2200}
+          text="Os riscos de governança representam outra fronteira crítica. A evidência de baixas taxas de participação, aliada a uma alta concentração de poder propositivo, revela que a descentralização idealizada ainda luta para se traduzir em resiliência prática. Existe o perigo real de captura de governança por interesses velados ou elites tecnofinanceiras, onde a votação baseada em tokens pode reforçar estruturas plutocráticas."
+        />
 
-            <ul className="space-y-3">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.id}>
-                  <button
-                    onClick={() => handleNavClick(item.id)}
-                    className={`
-                      text-left text-xl lg:text-2xl font-serif transition-all duration-500
-                      ${activePage === item.id 
-                        ? 'text-white pl-4 border-l border-white' 
-                        : 'text-neutral-600 hover:text-neutral-200 hover:pl-2'}
-                    `}
-                  >
-                    {item.label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+        <Typewriter 
+          as="p"
+          delay={3400}
+          text="Sistemicamente, o Web3 ReGen enfrenta a tensão contínua entre a regeneração genuína e o risco de financeirização indevida da natureza. A transformação do Global Commons em uma 'fronteira de commodities' através da tokenização pode, se dissociada de princípios ecocêntricos, exacerbar lógicas extrativas sob o rótulo de inovação."
+        />
 
-          <div className="pt-10 border-t border-white/5">
-            <FooterText />
-          </div>
-        </div>
-      </div>
-
-      {/* Área de Conteúdo Principal */}
-      <main className={`
-        flex-1 flex flex-col relative
-        ${isHome ? 'p-0 h-screen overflow-hidden' : 'pt-28 pb-10 px-6 lg:px-0'}
-      `}>
-        <div className={`
-          flex-1 w-full mx-auto flex flex-col
-          ${isHome ? 'max-w-none' : 'max-w-2xl lg:max-w-3xl'}
-        `}>
-          <div className="flex-1 w-full">
-            {children}
-          </div>
-          
-          {!isHome && (
-            <footer className="mt-24 pt-10 pb-16 border-t border-white/5 flex flex-col lg:flex-row justify-between items-start gap-8 opacity-30 hover:opacity-100 transition-opacity duration-700">
-              <FooterText />
-              <div className="flex gap-6">
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-[9px] font-mono uppercase tracking-widest hover:text-white transition-colors">Github</a>
-                <a href="#" className="text-[9px] font-mono uppercase tracking-widest hover:text-white transition-colors">Docs</a>
-                <a href="#" className="text-[9px] font-mono uppercase tracking-widest hover:text-white transition-colors">Regen</a>
-              </div>
-            </footer>
-          )}
-        </div>
-      </main>
-    </div>
+        <Typewriter 
+          as="p"
+          delay={4600}
+          text="No âmbito regulatório, a divergência global e a incerteza jurídica sobre tokens de impacto geram atritos que limitam a escala institucional. Próximos passos envolvem um processo de evolução voltado à profissionalização e à integração secular, conectando ativos do mundo real (RWA) à regeneração tangível. A transição exige uma mudança de foco: dos ciclos de especulação para a utilidade operacional."
+        />
+      </section>
+    </article>
   );
 };
 
-export default Layout;
+export default Risks;
