@@ -1,179 +1,150 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { NAV_ITEMS } from '../constants';
+import { Page } from '../types';
 
-interface LandingScreenProps {
-  onEnter?: () => void;
+interface LayoutProps {
+  children: React.ReactNode;
+  activePage: Page;
+  onNavigate: (page: Page) => void;
 }
 
-interface Particle {
-  x: number;
-  y: number;
-  char: string;
-  targetX: number;
-  targetY: number;
-  alpha: number;
-  size: number;
-  active: boolean;
-}
+const Layout: React.FC<LayoutProps> = ({ children, activePage, onNavigate }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isHome = activePage === Page.Home;
 
-const LandingScreen: React.FC<LandingScreenProps> = ({ onEnter }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const particlesRef = useRef<Particle[]>([]);
-  const [isForming, setIsForming] = useState(false);
-  const [isFinal, setIsFinal] = useState(false);
-  const [titleRect, setTitleRect] = useState({ width: 0, height: 40 });
-  const targetText = "Observatório Web3 ReGen";
+  const handleNavClick = (page: Page) => {
+    onNavigate(page);
+    setIsMenuOpen(false);
+  };
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isMenuOpen]);
 
-    let animationFrame: number;
-    let frameCount = 0;
-
-    const calculateTargets = (width: number, height: number) => {
-      ctx.font = `bold 32px 'Playfair Display'`;
-      const textWidth = ctx.measureText(targetText).width;
-      const startX = (width - textWidth) / 2;
-      const startY = height * 0.22;
-
-      setTitleRect({ width: textWidth, height: 40 });
-
-      if (particlesRef.current.length === 0) {
-        for (let i = 0; i < targetText.length; i++) {
-          const charWidth = ctx.measureText(targetText[i]).width;
-          const currentX = startX + ctx.measureText(targetText.substring(0, i)).width;
-          particlesRef.current.push({
-            x: Math.random() * width,
-            y: -50,
-            char: targetText[i],
-            targetX: currentX + charWidth / 2,
-            targetY: startY,
-            alpha: 0,
-            size: 16,
-            active: false
-          });
-        }
-      } else {
-        for (let i = 0; i < targetText.length; i++) {
-          const charWidth = ctx.measureText(targetText[i]).width;
-          const currentX = startX + ctx.measureText(targetText.substring(0, i)).width;
-          particlesRef.current[i].targetX = currentX + charWidth / 2;
-          particlesRef.current[i].targetY = startY;
-        }
-      }
-    };
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      calculateTargets(canvas.width, canvas.height);
-    };
-
-    window.addEventListener('resize', resize);
-    resize();
-
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$@#%&*+=-<>[]{}/\\ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ";
-    const fontSize = 16;
-    const columns = Math.ceil(canvas.width / fontSize);
-    const drops: number[] = new Array(columns).fill(0).map(() => Math.random() * -100);
-    
-    const t1 = setTimeout(() => setIsForming(true), 1000); 
-    const t2 = setTimeout(() => setIsFinal(true), 3500);   
-
-    const draw = () => {
-      frameCount++;
-      ctx.fillStyle = 'rgba(10, 10, 10, 0.08)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.font = `${fontSize}px JetBrains Mono`;
-      for (let i = 0; i < drops.length; i++) {
-        const char = characters.charAt(Math.floor(Math.random() * characters.length));
-        const opacity = Math.random() * 0.12 + 0.03;
-        ctx.fillStyle = `rgba(160, 160, 160, ${opacity})`;
-        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i] += 0.8;
-      }
-
-      if (isForming) {
-        particlesRef.current.forEach((p, i) => {
-          if (!p.active && frameCount > 30 + i * 3) {
-            p.active = true;
-            p.x = Math.random() * canvas.width;
-            p.y = Math.random() * (canvas.height * 0.4);
-          }
-          if (p.active) {
-            const ease = isFinal ? 0.15 : 0.06;
-            p.x += (p.targetX - p.x) * ease;
-            p.y += (p.targetY - p.y) * ease;
-            p.alpha = Math.min(1, p.alpha + 0.04);
-            p.size = isFinal ? 32 : (16 + (32 - 16) * p.alpha);
-
-            ctx.shadowBlur = isFinal ? 15 : 4;
-            ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
-            ctx.fillStyle = isFinal ? '#ffffff' : `rgba(255, 255, 255, ${p.alpha})`;
-            ctx.font = `bold ${p.size}px 'Playfair Display'`;
-            ctx.textAlign = 'center';
-            ctx.fillText(p.char, p.x, p.y);
-            ctx.shadowBlur = 0;
-          }
-        });
-      }
-      animationFrame = requestAnimationFrame(draw);
-    };
-
-    draw();
-    return () => {
-      cancelAnimationFrame(animationFrame);
-      window.removeEventListener('resize', resize);
-      clearTimeout(t1); clearTimeout(t2);
-    };
-  }, [isForming, isFinal]);
+  const FooterText = () => (
+    <div className="flex flex-col gap-2">
+      <p className="text-[9px] font-mono text-neutral-600 uppercase tracking-[0.2em]">
+        Status: Sincronizado
+      </p>
+      <p className="text-[10px] font-mono text-neutral-500 leading-relaxed tracking-tight">
+        © 2026 Observatório Web3 ReGen · Licença MIT <br/>
+        Infraestrutura por CalangoFlux
+      </p>
+    </div>
+  );
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-[#0a0a0a]">
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-90" />
+    <div className="min-h-screen bg-[#0a0a0a] text-neutral-300 selection:bg-white/10 flex flex-col relative">
       
-      {isFinal && onEnter && (
-        <button
-          onClick={onEnter}
-          className="absolute left-1/2 -translate-x-1/2 z-[30] cursor-pointer outline-none bg-transparent border-none hover:scale-[1.02] transition-transform duration-700"
-          style={{ 
-            top: 'calc(22% - 25px)', 
-            width: `${titleRect.width + 60}px`, 
-            height: `${titleRect.height + 30}px` 
-          }}
-          aria-label="Entrar no Observatório"
-        />
+      {/* Botão de Menu Flutuante - Arredondado e Glassmorphism */}
+      <button 
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        className={`
+          fixed top-6 right-6 lg:top-10 lg:right-10 z-[120]
+          flex items-center gap-3 px-6 py-2.5 rounded-full
+          bg-[#0d0d0d]/60 backdrop-blur-xl border border-white/10
+          hover:border-white/30 transition-all duration-500 group
+          ${isMenuOpen ? 'bg-white text-black border-white' : 'text-white'}
+        `}
+      >
+        <span className="text-[9px] font-mono tracking-[0.3em] uppercase ml-1">
+          {isMenuOpen ? 'Fechar' : 'Menu'}
+        </span>
+        <div className="flex flex-col gap-1 w-3.5">
+          <span className={`h-px w-full bg-current transition-transform duration-500 ${isMenuOpen ? 'rotate-45 translate-y-[2px]' : ''}`}></span>
+          <span className={`h-px w-full bg-current transition-transform duration-500 ${isMenuOpen ? '-rotate-45 -translate-y-[2px]' : ''}`}></span>
+        </div>
+      </button>
+
+      {/* Identificador de Marca (Top Left) */}
+      {!isHome && (
+        <div className="fixed top-6 left-6 lg:top-10 lg:left-10 z-[40] pointer-events-none">
+          <div className="text-[11px] font-serif text-white/30 tracking-widest uppercase">
+            Web3 ReGen <span className="ml-1 font-mono text-[9px] opacity-30 tracking-normal italic">v4.0.2</span>
+          </div>
+        </div>
       )}
 
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_10%,rgba(10,10,10,0.9)_100%)]"></div>
-      
-      <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
-        {/* Moldura de Lupa / Torus */}
-        <div className={`relative w-full max-w-[340px] lg:max-w-[700px] aspect-[16/9] transition-all duration-[3000ms] ease-out ${isFinal ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
-          <div className="absolute -inset-2 lg:-inset-4 border border-white/5 rounded-[100%_0] rotate-45 animate-eye-sync opacity-40"></div>
-          <div className="w-full h-full overflow-hidden relative shadow-[0_0_100px_rgba(34,197,94,0.1)] bg-neutral-900/20" style={{ clipPath: 'ellipse(50% 40% at 50% 50%)' }}>
-            <video autoPlay muted loop playsInline className={`w-full h-full object-cover transition-all duration-1000 grayscale-[0.6] brightness-75 ${isFinal ? 'scale-110' : 'scale-100'}`}>
-              <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-torus-mesh-on-a-black-background-44165-large.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/80"></div>
-          </div>
-        </div>
+      {/* Overlay do Menu Drawer - Translúcido */}
+      <div className={`
+        fixed inset-0 z-[110] transition-all duration-700 ease-in-out
+        ${isMenuOpen ? 'visible opacity-100' : 'invisible opacity-0'}
+      `}>
+        <div 
+          className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+          onClick={() => setIsMenuOpen(false)}
+        />
+        
+        <div className={`
+          absolute right-0 top-0 h-full w-full lg:w-[400px] 
+          bg-[#0d0d0d]/80 backdrop-blur-[40px] 
+          border-l border-white/5 p-10 lg:p-16 flex flex-col justify-between
+          transition-transform duration-700 cubic-bezier(0.16, 1, 0.3, 1)
+          ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}
+        `}>
+          <div>
+            <div className="mb-16">
+              <h3 className="text-[9px] font-mono text-neutral-500 uppercase tracking-[0.5em] mb-4">Navegação</h3>
+              <div className="h-px w-8 bg-white/20"></div>
+            </div>
 
-        <div className={`absolute bottom-[12%] lg:bottom-[15%] text-center transition-all duration-1000 delay-700 ${isFinal ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-            <p className="text-[9px] lg:text-[10px] font-mono text-white/60 uppercase tracking-[0.5em] font-medium">Protocolo de Observação Ativa</p>
+            <ul className="space-y-3">
+              {NAV_ITEMS.map((item) => (
+                <li key={item.id}>
+                  <button
+                    onClick={() => handleNavClick(item.id)}
+                    className={`
+                      text-left text-xl lg:text-2xl font-serif transition-all duration-500
+                      ${activePage === item.id 
+                        ? 'text-white pl-4 border-l border-white' 
+                        : 'text-neutral-600 hover:text-neutral-200 hover:pl-2'}
+                    `}
+                  >
+                    {item.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
-          <p className="mt-4 text-[8px] lg:text-[9px] font-mono text-neutral-600 max-w-xs mx-auto leading-relaxed uppercase tracking-[0.4em]">Sincronização Biosférica v.4.0.2</p>
+
+          <div className="pt-10 border-t border-white/5">
+            <FooterText />
+          </div>
         </div>
       </div>
+
+      {/* Área de Conteúdo Principal */}
+      <main className={`
+        flex-1 flex flex-col relative
+        ${isHome ? 'p-0 h-screen overflow-hidden' : 'pt-28 pb-10 px-6 lg:px-0'}
+      `}>
+        <div className={`
+          flex-1 w-full mx-auto flex flex-col
+          ${isHome ? 'max-w-none' : 'max-w-2xl lg:max-w-3xl'}
+        `}>
+          <div className="flex-1 w-full">
+            {children}
+          </div>
+          
+          {!isHome && (
+            <footer className="mt-24 pt-10 pb-16 border-t border-white/5 flex flex-col lg:flex-row justify-between items-start gap-8 opacity-30 hover:opacity-100 transition-opacity duration-700">
+              <FooterText />
+              <div className="flex gap-6">
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-[9px] font-mono uppercase tracking-widest hover:text-white transition-colors">Github</a>
+                <a href="#" className="text-[9px] font-mono uppercase tracking-widest hover:text-white transition-colors">Docs</a>
+                <a href="#" className="text-[9px] font-mono uppercase tracking-widest hover:text-white transition-colors">Regen</a>
+              </div>
+            </footer>
+          )}
+        </div>
+      </main>
     </div>
   );
 };
 
-export default LandingScreen;
+export default Layout;
