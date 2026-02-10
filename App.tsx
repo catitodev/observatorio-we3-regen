@@ -14,6 +14,7 @@ import CustomCursor from './components/CustomCursor';
 import { Page } from './types';
 
 const App: React.FC = () => {
+  // Inicializa estritamente no Home
   const [activePage, setActivePage] = useState<Page>(Page.Home);
 
   useEffect(() => {
@@ -21,19 +22,30 @@ const App: React.FC = () => {
       const hash = window.location.hash.replace('#', '') as Page;
       if (Object.values(Page).includes(hash)) {
         setActivePage(hash);
-      } else if (!window.location.hash) {
+      } else {
+        // Se não houver hash válido, mantém ou volta para Home
         setActivePage(Page.Home);
       }
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    handleHashChange();
+    
+    // Na carga inicial, se houver hash, respeita, senão Home
+    if (window.location.hash) {
+      handleHashChange();
+    } else {
+      setActivePage(Page.Home);
+    }
 
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   const handleNavigate = (page: Page) => {
-    window.location.hash = page;
+    if (page === Page.Home) {
+      window.location.hash = '';
+    } else {
+      window.location.hash = page;
+    }
     setActivePage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -57,9 +69,7 @@ const App: React.FC = () => {
     <>
       <CustomCursor />
       <Layout activePage={activePage} onNavigate={handleNavigate}>
-        <div className="max-w-screen-md">
-          {renderContent()}
-        </div>
+        {renderContent()}
       </Layout>
     </>
   );
